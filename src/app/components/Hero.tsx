@@ -12,11 +12,11 @@ const Hero = () => {
         <section className="gradient-bg text-white py-16 sm:py-44" id="hero">
             <div className="container mx-auto px-12 flex flex-col md:flex-row items-center">
                 <div className="md:w-1/2 mb-10 md:mb-0">
-                    <h1 className="text-4xl sm:text-5xl font-bold text-white mb-8">
+                    <h1 className="text-2xl sm:text-5xl font-bold text-white mb-2 sm:mb-8">
                         Ace Every Interview with Confidence - <span className="text-green-400">Powered by AI</span>
                     </h1>
 
-                    <p className="text-xl mb-12 text-gray-300 leading-8">
+                    <p className="text-md sm:text-xl mb-2 sm:mb-12 text-gray-300 leading-8">
                         prepJar is your AI-powered partner for interview success.
                         <br />
                         Practice fluent English speaking in real-time with smart feedback.

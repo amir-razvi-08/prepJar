@@ -4,14 +4,21 @@ import { useRouter } from "next/navigation";
 import { FaTwitter, FaLinkedinIn, FaInstagram, FaYoutube } from "react-icons/fa";
 
 const Footer = () => {
-    const router= useRouter()
+    const router = useRouter();
     return (
-        <footer className="bg-gray-900 text-gray-300 pb-6 pt-10" id="footer" >
+        <footer className="bg-gray-900 text-gray-300 pb-6 pt-10" id="footer">
             <div className="container mx-auto px-4">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div>
                         <div className="flex items-center space-x-2 mb-">
-                            <Image src="/prepjar.png" alt="prepJar" width={100} height={100} onClick={()=>(router.replace("/"))} className="cursor-pointer" />
+                            <Image
+                                src="/prepjar.png"
+                                alt="prepJar"
+                                width={100}
+                                height={100}
+                                onClick={() => router.replace("/")}
+                                className="cursor-pointer"
+                            />
                         </div>
                         <p className="mb-4">The most advanced AI-powered interview preparation platform for job seekers.</p>
                         <div className="flex space-x-4">
@@ -32,65 +39,61 @@ const Footer = () => {
                             </a>
                         </div>
                     </div>
+                    <div className="grid grid-cols-3 space-x-2">
+                        <div>
+                            <h3 className="text-white font-semibold text-lg mb-4">Product</h3>
+                            <ul className="space-y-2">
+                                <li>
+                                    <a href="#" className="hover:text-white">
+                                        Features
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/billing" className="hover:text-white">
+                                        Pricing
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" className="hover:text-white">
+                                        Roadmap
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
 
-                    <div>
-                        <h3 className="text-white font-semibold text-lg mb-4">Product</h3>
-                        <ul className="space-y-2">
-                            <li>
-                                <a href="#" className="hover:text-white">
-                                    Features
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" className="hover:text-white">
-                                    Pricing
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" className="hover:text-white">
-                                    Roadmap
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+                        <div>
+                            <h3 className="text-white font-semibold text-lg mb-4">Resources</h3>
+                            <ul className="space-y-2">
+                                <li>
+                                    <a href="#" className="hover:text-white">
+                                        Interview Guides
+                                    </a>
+                                </li>
 
-                    <div>
-                        <h3 className="text-white font-semibold text-lg mb-4">Resources</h3>
-                        <ul className="space-y-2">
-                            <li>
-                                <a href="#" className="hover:text-white">
-                                    Interview Guides
-                                </a>
-                            </li>
+                                <li>
+                                    <a href="#" className="hover:text-white">
+                                        Community
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
 
-                            <li>
-                                <a href="#" className="hover:text-white">
-                                    Community
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" className="hover:text-white">
-                                    Help Center
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+                        <div>
+                            <h3 className="text-white font-semibold text-lg mb-4">Company</h3>
+                            <ul className="space-y-2">
+                                <li>
+                                    <a href="#" className="hover:text-white">
+                                        About Us
+                                    </a>
+                                </li>
 
-                    <div>
-                        <h3 className="text-white font-semibold text-lg mb-4">Company</h3>
-                        <ul className="space-y-2">
-                            <li>
-                                <a href="#" className="hover:text-white">
-                                    About Us
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="#" className="hover:text-white">
-                                    Contact
-                                </a>
-                            </li>
-                        </ul>
+                                <li>
+                                    <a href="#" className="hover:text-white">
+                                        Contact
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
 

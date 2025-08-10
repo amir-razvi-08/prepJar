@@ -6,7 +6,6 @@ import { handleLogin } from "@/actions/login";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
-
 export const LoginForm = () => {
     const router = useRouter();
 
@@ -20,12 +19,10 @@ export const LoginForm = () => {
                     toast.error("Please fill in all fields");
                     return;
                 }
-
                 const error = await handleLogin(email, password);
                 if (!error) {
                     toast.success("Login successful!");
-
-                    router.refresh();
+                    router.replace("/");
                 }
             }}
             className="flex flex-col gap-4"

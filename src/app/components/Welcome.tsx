@@ -15,7 +15,7 @@ export default function WelcomeWindow() {
   };
 
   return (
-    <Card className="max-w-md mx-auto mt-10 shadow-xl rounded-2xl border border-gray-200">
+    <Card className="max-w-md mx-auto sm:mt-10 shadow-xl rounded-2xl border border-gray-200">
       <CardContent className="p-6 space-y-6">
         {/* Header dots */}
         <div className="flex items-center">
