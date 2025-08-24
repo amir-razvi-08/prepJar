@@ -8,10 +8,13 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { handleLogout } from "@/actions/logout";
 import { clearUser } from "@/redux/features/userSlice";
-import { useAppDispatch } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import Image from "next/image";
+import ImageUploader from "./components/ImageUploader";
 
 export default function SettingsPage() {
-    const [user, setUser] = useState({ name: "John Doe", email: "john@example.com" });
+    const user = useAppSelector((state) => state.user.user);
+    const [userData, setUserData] = useState({ name: "John Doe", email: "john@example.com" });
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const dispatch = useAppDispatch();
@@ -52,29 +55,54 @@ export default function SettingsPage() {
                     Logout
                 </Button>
             </div>
-            {/* Profile Card */}
             <Card className="mb-6">
                 <CardHeader>
                     <CardTitle>Update Profile</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <form onSubmit={handleProfileUpdate} className="space-y-4">
-                        <div className="grid gap-2">
-                            <Label htmlFor="name">Full Name</Label>
-                            <Input id="name" type="text" value={user.name} onChange={(e) => setUser({ ...user, name: e.target.value })} required />
+                    <div className="grid grid-cols-1 lg:grid-cols-4 gap-12 justify-center items-center">
+                        <div className="relative w-48 h-48 flex justify-center items-center lg:col-span-1 mx-auto">
+                            <Image
+                                src={user?.image ?? "/avatar.png"}
+                                alt="User"
+                                width={160}
+                                height={160}
+                                className="rounded-full object-cover w-40 h-40"
+                            />
+                            <div className="absolute bottom-4 right-4">
+                                <ImageUploader />
+                            </div>
                         </div>
-                        <div className="grid gap-2">
-                            <Label htmlFor="email">Email</Label>
-                            <Input id="email" type="email" value={user.email} onChange={(e) => setUser({ ...user, email: e.target.value })} required />
-                        </div>
-                        <Button type="submit" disabled={loading}>
-                            {loading ? "Updating..." : "Update Profile"}
-                        </Button>
-                    </form>
+
+                        <form onSubmit={handleProfileUpdate} className="space-y-4 lg:col-span-3">
+                            <div className="grid gap-2">
+                                <Label htmlFor="name">Full Name</Label>
+                                <Input
+                                    id="name"
+                                    type="text"
+                                    value={userData.name}
+                                    onChange={(e) => setUserData({ ...userData, name: e.target.value })}
+                                    required
+                                />
+                            </div>
+                            <div className="grid gap-2">
+                                <Label htmlFor="email">Email</Label>
+                                <Input
+                                    id="email"
+                                    type="email"
+                                    value={userData.email}
+                                    onChange={(e) => setUserData({ ...userData, email: e.target.value })}
+                                    required
+                                />
+                            </div>
+                            <Button type="submit" disabled={loading}>
+                                {loading ? "Updating..." : "Update Profile"}
+                            </Button>
+                        </form>
+                    </div>
                 </CardContent>
             </Card>
 
-            {/* Password Card */}
             <Card className="mb-6">
                 <CardHeader>
                     <CardTitle>Change Password</CardTitle>
