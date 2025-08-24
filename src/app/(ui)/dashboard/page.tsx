@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { AverageFeedback } from "./type";
 import axios from "axios";
 import { useAppSelector } from "@/redux/hooks";
+import { toast } from "sonner";
 
 interface IinterviewData {
     _id: string;
@@ -48,7 +49,7 @@ const DashboardPage = () => {
                 setAvgScores(res.data);
                 setOverallScore(res.data.averageOverallScore ?? 0);
             } catch (error) {
-                console.error("Error fetching averages:", error);
+                toast.warning("Unable to fetch feedback");
             }
         };
 
@@ -60,13 +61,12 @@ const DashboardPage = () => {
         const fetchAverages = async () => {
             try {
                 const res = await axios.get(`/api/interview-session?userId=${userId}`);
-                console.log(res.data.titleBreakdown);
                 setSessions(res.data.totalSessions[0].total);
                 setInterviewData({ ...res.data?.titleBreakdown });
                 setLatestInterviews(res.data.latestInterviews);
                 setCredits(res.data.credits);
             } catch (error) {
-                console.error("Error fetching averages:", error);
+                toast.warning("Unable to fetch feedback");
             }
         };
 
