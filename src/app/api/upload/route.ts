@@ -3,10 +3,6 @@ import { connectDB } from "@/lib/db";
 import { getServerUser } from "@/lib/getUser";
 import { User } from "@/models/user.model";
 import { NextRequest, NextResponse } from "next/server";
-
-export const runtime = "nodejs";
-export const maxBodySize = "10mb";
-
 export async function POST(req: NextRequest) {
     try {
         const user = await getServerUser();
@@ -36,7 +32,7 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: "User not found" }, { status: 404 });
         }
 
-        return NextResponse.json({ success: true, imageUrl: result.secure_url, user }, { status: 200 });
+        return NextResponse.json({ success: true, imageUrl: result.secure_url, user: newUser }, { status: 200 });
     } catch (error) {
         console.error("Upload Error:", error);
         return NextResponse.json({ error: "Server error" }, { status: 500 });
