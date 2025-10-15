@@ -23,8 +23,6 @@ interface IinterviewInfo {
     questionList: string[];
 }
 
-console
-
 export default function Home() {
     const vapi = getVapiClient();
     const interviewData: IinterviewData | null = useAppSelector((state) => state.interview.interviewData);
@@ -37,7 +35,7 @@ export default function Home() {
     const userId = user?.id;
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
-    const questionsOnly = interviewData?.questionList.map((q) => q.question) || [];
+    const questionsOnly = interviewData?.questionList[0].interviewQuestions.map((q) => q.question) || [];
 
     const interviewInfo: IinterviewInfo = {
         candidateName: user?.name ?? "Unknown Candidate",
@@ -126,8 +124,8 @@ export default function Home() {
     const GenerateFeedback = async (transcript: string) => {
         setIsLoading(true);
         try {
-            const res = await axios.post("/api/interview-feedback", { transcript, interviewId, userId });
-            console.log("feedback==", res.data);
+            await axios.post("/api/interview-feedback", { transcript, interviewId, userId });
+
         } catch (error) {
             console.error("Error generating feedback:", error);
         }

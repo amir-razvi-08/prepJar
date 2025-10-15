@@ -21,7 +21,6 @@ export const generateInterviewQuestions = async (input: InterviewFormInput) => {
     };
 
     const result = await generateInterviewChain.invoke(formattedInput);
-    console.log("result=", result);
 
     if (!result) throw new Error("Failed to generate interview questions");
 

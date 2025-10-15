@@ -57,7 +57,6 @@ const InterviewModes = () => {
             return;
         }
         setIsLoading(false);
-        // router.replace("/start-interview");
     };
 
     return (

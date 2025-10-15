@@ -1,6 +1,10 @@
-export interface QuestionItem {
+export interface InterviewQuestionsList {
   question: string;
   type: string;
+}
+
+export interface QuestionItem {
+  interviewQuestions: InterviewQuestionsList[];
 }
 
 export interface IinterviewData {
@@ -16,6 +20,7 @@ export interface IinterviewData {
   createdAt: string;
   __v: number;
 }
+
 
 
 export interface ConversationMessage {

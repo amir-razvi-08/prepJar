@@ -1,6 +1,10 @@
-export interface QuestionItem {
+export interface InterviewQuestion {
   question: string;
   type: string;
+}
+
+export interface QuestionItem {
+  interviewQuestions: InterviewQuestion[];
 }
 
 export interface IinterviewData {
@@ -10,9 +14,9 @@ export interface IinterviewData {
   technicalSkills: string[];
   interviewTitle: string;
   interviewType: string[];
-  difficulty: 'Easy' | 'Medium' | 'Hard' | string;
+  difficulty: 'Easy' | 'Medium' | 'Hard';
   duration: number;
   questionList: QuestionItem[];
-  createdAt: string; // Use Date if parsed
+  createdAt: string;
   __v: number;
 }
