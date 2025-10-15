@@ -8,22 +8,22 @@ import { Card, CardContent } from "@/components/ui/card";
 
 const testimonials = [
     {
-        quote: "From intuitive front-end design to seamless backend integration, the site is a true showcase of full-stack excellence.",
-        author: "Dhanshree",
-        image: "/user Photos/Dhanshree.jpeg",
+        quote: "It’s not just practice; it’s smart feedback. PrepJar makes interview preparation data-driven and personal.",
+        author: "Ayan Malik",
+        image: "/user Photos/ayan.jpg",
         role: "Full Stack Developer, GreatHire",
     },
     {
-        quote: "Built with security at its core, the site ensures robust protection against vulnerabilities while maintaining smooth performance.",
-        author: "Sujeeth",
-        image: "/user Photos/Sujeeth.jpeg",
-        role: "Information Security Analyst, GlobalSoft",
+        quote: "The voice-based mock interviews are so realistic — it actually feels like a real recruiter is talking to you.",
+        author: "Noor Alam",
+        image: "/user Photos/noor.jpg",
+        role: "Data Security Analyst, GlobalSoft",
     },
     {
-        quote: "Built with security at its core, the site ensures robust protection against vulnerabilities while maintaining smooth performance.",
-        author: "Eswar",
-        image: "/user Photos/avatar.jpeg",
-        role: "Information Security Analyst, GlobalSoft",
+        quote: "Finally, an interview prep tool that adapts to me! The personalized questions are next-level.",
+        author: "Nitesh Kumar",
+        image: "/user Photos/nitesh.jpg",
+        role: "Data Scientist, GlobalSoft",
     },
 ];
 
