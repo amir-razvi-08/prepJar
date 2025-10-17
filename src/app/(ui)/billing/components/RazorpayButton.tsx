@@ -9,6 +9,10 @@ interface RazorpayButtonProps {
     amount: number;
     credits: number;
     planName: string;
+    formdata: {
+        name: string;
+        email: string;
+    };
 }
 
 interface RazorpayPaymentResponse {
@@ -17,14 +21,27 @@ interface RazorpayPaymentResponse {
     razorpay_signature: string;
 }
 
-export default function RazorpayButton({ amount, credits, planName }: RazorpayButtonProps) {
+export default function RazorpayButton({ amount, credits, planName, formdata }: RazorpayButtonProps) {
     const [loading, setLoading] = useState(false);
     const handlePayment = async () => {
+        if (!formdata.name.trim()) {
+            toast.warning("enter your name");
+            return null;
+        }
+        if (!formdata.email.trim()) {
+            toast.warning("enter your email");
+            return null;
+        }
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!emailRegex.test(formdata.email)) {
+            toast.warning("Enter a valid email address");
+            return null;
+        }
         setLoading(true);
         try {
             const orderRes = await axios.post("/api/razorpay-order", { amount, credits, planName });
             const order = orderRes.data.order;
-            console.log("order", order);
 
             const options = {
                 key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!,
@@ -56,8 +73,8 @@ export default function RazorpayButton({ amount, credits, planName }: RazorpayBu
                     }
                 },
                 prefill: {
-                    name: "Test User",
-                    email: "test@example.com",
+                    name: formdata.name,
+                    email: formdata.email,
                     contact: "9999999999",
                 },
                 theme: {

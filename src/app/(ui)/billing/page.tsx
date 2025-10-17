@@ -1,162 +1,18 @@
 "use client";
-
 import { useState } from "react";
 import { PLANS } from "./components/Constants";
 import RazorpayButton from "./components/RazorpayButton";
-
-declare global {
-    interface RazorpayPaymentResponse {
-        razorpay_payment_id: string;
-        razorpay_order_id: string;
-        razorpay_signature: string;
-    }
-}
 
 export default function Billing() {
     const [selectedPlan, setSelectedPlan] = useState(PLANS[0]);
     const [formData, setFormData] = useState({
         name: "",
         email: "",
-        phone: "",
     });
-
-    const [error, setError] = useState("");
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
-    };
-
-    const validateForm = () => {
-        if (!formData.name.trim()) {
-            setError("Please enter your name");
-            return false;
-        }
-        if (!formData.email.trim()) {
-            setError("Please enter your email");
-            return false;
-        }
-        if (!formData.phone.trim()) {
-            setError("Please enter your phone number");
-            return false;
-        }
-        if (typeof selectedPlan.price !== "number") {
-            setError("Please contact us for custom pricing");
-            return false;
-        }
-        setError("");
-        return true;
-    };
-
-    const initiatePayment = async (e: React.ChangeEvent<HTMLFormElement>) => {
-        e.preventDefault();
-
-        if (!validateForm()) return;
-
-        try {
-            if (!window.Razorpay) {
-                await loadRazorpayScript();
-            }
-
-            const amount = selectedPlan.price * 100;
-
-            const response = await fetch("/api/create-razorpay-order", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    amount: amount,
-                    currency: "INR",
-                    planId: selectedPlan.id,
-                    customer: {
-                        name: formData.name,
-                        email: formData.email,
-                        contact: formData.phone,
-                    },
-                }),
-            });
-
-            if (!response.ok) {
-                throw new Error("Failed to create order");
-            }
-
-            const { orderId, amount: orderAmount, currency } = await response.json();
-
-            const options = {
-                key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!,
-                amount: orderAmount,
-                currency: currency,
-                name: "Your Company",
-                description: `Subscription: ${selectedPlan.name}`,
-                order_id: orderId,
-                handler: async function (response: RazorpayPaymentResponse) {
-                    try {
-                        const verification = await fetch("/api/verify-payment", {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
-                            body: JSON.stringify({
-                                razorpay_payment_id: response.razorpay_payment_id,
-                                razorpay_order_id: response.razorpay_order_id,
-                                razorpay_signature: response.razorpay_signature,
-                                planId: selectedPlan.id,
-                                customer: formData,
-                            }),
-                        });
-
-                        const result = await verification.json();
-                        if (result.success) {
-                            window.location.href = `/payment-success?payment_id=${response.razorpay_payment_id}&plan=${selectedPlan.id}`;
-                        } else {
-                            alert("Payment verification failed. Please contact support.");
-                        }
-                    } catch (err) {
-                        console.error("Verification error:", err);
-                        alert("There was an error verifying your payment. Please contact support.");
-                    }
-                },
-                prefill: {
-                    name: formData.name,
-                    email: formData.email,
-                    contact: formData.phone,
-                },
-                notes: {
-                    plan: selectedPlan.name,
-                },
-                theme: {
-                    color: "#6366f1",
-                },
-            };
-
-            const rzp = new window.Razorpay!(options);
-            rzp.on("payment.failed", function (response) {
-                alert(`Payment failed: ${response.error.description}`);
-            });
-            rzp.open();
-        } catch (error) {
-            console.error("Payment error:", error);
-            if (error instanceof Error) {
-                setError(error.message);
-            } else {
-                setError("Payment failed. Please try again.");
-            }
-        }
-    };
-
-    const loadRazorpayScript = (): Promise<void> => {
-        return new Promise((resolve) => {
-            const script = document.createElement("script");
-            script.src = "https://checkout.razorpay.com/v1/checkout.js";
-            script.onload = () => {
-                resolve();
-            };
-            script.onerror = () => {
-                throw new Error("Failed to load Razorpay script");
-            };
-            document.body.appendChild(script);
-        });
     };
 
     return (
@@ -246,6 +102,7 @@ export default function Billing() {
                     </div>
 
                     {/* Payment Form */}
+
                     <div className="mt-16 max-w-2xl mx-auto">
                         <div className="bg-white rounded-xl shadow-lg overflow-hidden">
                             <div className="p-8 sm:p-10">
@@ -254,9 +111,7 @@ export default function Billing() {
                                     <p className="mt-2 text-gray-600">Enter your details to get started</p>
                                 </div>
 
-                                {error && <div className="mb-6 p-4 bg-red-50 text-red-600 rounded-md">{error}</div>}
-
-                                <form onSubmit={initiatePayment} className="space-y-6">
+                                <div className="space-y-6">
                                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                                         <div className="space-y-2">
                                             <label htmlFor="name" className="block text-sm font-medium text-gray-700">
@@ -289,29 +144,14 @@ export default function Billing() {
                                                 placeholder="john@example.com"
                                             />
                                         </div>
-
-                                        <div className="space-y-2">
-                                            <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
-                                                Phone Number
-                                            </label>
-                                            <input
-                                                type="tel"
-                                                id="phone"
-                                                name="phone"
-                                                required
-                                                value={formData.phone}
-                                                onChange={handleChange}
-                                                className="block w-full px-4 py-3 rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                                                placeholder="+91 9876543210"
-                                            />
-                                        </div>
-
-                                        <div className="space-y-2">
-                                            <label className="block text-sm font-medium text-gray-700">Selected Plan</label>
-                                            <div className="px-4 py-3 bg-gray-50 rounded-md h-full flex flex-col justify-center">
-                                                <p className="font-medium text-gray-900">{selectedPlan.name}</p>
-                                                <p className="text-sm text-gray-500"></p>
-                                            </div>
+                                    </div>
+                                    <div className="">
+                                        <label className="block text-sm font-medium text-gray-700 ">Selected Plan</label>
+                                        <div className="py-2 bg-gray-50 rounded-md h-full flex flex-col justify-center">
+                                            <p className="font-medium text-xl text-gray-900 flex justify-center border-2 p-2 rounded-md border-purple-600">
+                                                {selectedPlan.name}
+                                            </p>
+                                            <p className="text-sm text-gray-500"></p>
                                         </div>
                                     </div>
 
@@ -320,14 +160,14 @@ export default function Billing() {
                                             amount={selectedPlan.price * (1 - selectedPlan.discount / 100)}
                                             credits={selectedPlan.credits}
                                             planName={selectedPlan.name}
+                                            formdata={formData}
                                         />
                                     </div>
-                                </form>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    {/* Trust indicators */}
                     <div className="mt-16 text-center">
                         <div className="inline-flex flex-wrap justify-center items-center divide-x divide-gray-200">
                             <div className="px-5 py-2">
