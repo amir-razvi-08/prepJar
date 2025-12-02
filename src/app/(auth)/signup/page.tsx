@@ -6,25 +6,9 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { connectDB } from "@/lib/db";
 import { User } from "@/models/user.model";
-// import { cookies } from "next/headers";
-// import { decode } from "next-auth/jwt";
+import { signIn } from "@/lib/auth";
 
- function Signup() {
-
-    // make function async to use await
-
-    // const cookiss = (await cookies()).get("authjs.session-token");
-    // console.log("Cookies:", cookiss?.name);
-
-    // const data = await decode({
-    //     token: cookiss?.value,
-    //     salt:cookiss?.name,
-    //     secret: process.env.AUTH_SECRET!,
-    // })
-
-    // console.log("Decoded Data:", data);
-
-
+function Signup() {
 
     const signUp = async (formData: FormData) => {
         "use server";
@@ -41,7 +25,7 @@ import { User } from "@/models/user.model";
         const user = await User.findOne({ email });
         if (user) throw new Error("User already exists");
 
-        const newUser = await User.create({ fullName:name, email, password });
+        const newUser = await User.create({ fullName: name, email, password });
         if (!newUser) throw new Error("Failed to create user");
 
         redirect("/login");
@@ -56,14 +40,19 @@ import { User } from "@/models/user.model";
                 <CardContent>
                     <form action={signUp} className="flex flex-col gap-4">
                         <Input placeholder="Name" type="name" name="name" />
-                        <Input placeholder="Email" type="email" name="email"/>
+                        <Input placeholder="Email" type="email" name="email" />
                         <Input placeholder="Password" type="password" name="password" />
                         <Button type="submit">Sign up</Button>
                     </form>
                 </CardContent>
                 <CardFooter className="flex flex-col gap-4">
                     <p>or</p>
-                    <form action="">
+                    <form
+                        action={async () => {
+                            "use server";
+                            await signIn("google");
+                        }}
+                    >
                         <Button type="submit" variant="outline">
                             Login with google
                         </Button>
