@@ -26,7 +26,7 @@ interface IinterviewInfo {
 export default function Home() {
     const vapi = getVapiClient();
     const interviewData: IinterviewData | null = useAppSelector((state) => state.interview.interviewData);
-    const user = useAppSelector((state) => state.user.user);
+    const user = useAppSelector((state) => state.user?.user);
     const [start, setStart] = useState(false);
     const [speaker, setSpeaker] = useState("");
     const conversation = useRef<ConversationMessage[]>([]);
